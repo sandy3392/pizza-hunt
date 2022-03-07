@@ -45,12 +45,30 @@ const handlePizzaSubmit = event => {
   const toppings = [...$pizzaForm.querySelectorAll('[name=topping]:checked')].map(topping => {
     return topping.value;
   });
+  console.log(toppings);
 
   if (!pizzaName || !createdBy || !toppings.length) {
     return;
   }
 
   const formData = { pizzaName, createdBy, size, toppings };
+
+  fetch('/api/pizzas', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+  })
+    .then(response => response.json())
+    .then(postResponse => {
+      alert('Pizza created successfully!');
+      console.log(postResponse);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
 $pizzaForm.addEventListener('submit', handlePizzaSubmit);
